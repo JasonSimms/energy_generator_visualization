@@ -1,6 +1,6 @@
 // import './App.css'
 import Banner from "./components/Banner"
-import { DataTable } from "./components/Table"
+import { GeneratorDataGrid } from "./components/GeneratorDataGrid"
 
 function App() {
 
@@ -8,7 +8,8 @@ function App() {
     <>
      <h1>Lets go</h1>
      <Banner />
-     <DataTable />
+     {/* <DataTable /> */}
+     <GeneratorDataGrid />
     </>
   )
 }

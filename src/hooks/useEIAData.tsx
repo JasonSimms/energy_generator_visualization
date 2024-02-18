@@ -30,18 +30,23 @@ export function useEIAData() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    let ignore = false
     const base_URL = buildEIAUrl({
       frequency: "monthly",
       data: ["county", "net-summer-capacity-mw", "net-winter-capacity-mw"],
       sort: [{ column: "period", direction: "desc" }],
       offset: 0,
       length: 5000,
+      // length: 50,
     });
     const key = "&api_key=" + import.meta.env.VITE_EIA_API_KEY; // Add your API key here
+    console.log('initiating api call...')
     fetch(base_URL + key)
       .then((response) => response.json())
       .then((data) => {
-        if (data?.response?.data) {
+        if(ignore) return; // ignore if cleanup has been called
+        if(data?.response?.data) {
+          console.log('setting data');
           setData(data.response.data);
           setIsLoading(false);
         } else {
@@ -49,6 +54,7 @@ export function useEIAData() {
             console.error(data);
         }
       });
+      return () => { ignore = true }  // cleanup function
   }, []);
 
   return { data, isLoading, error };
