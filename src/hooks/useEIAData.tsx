@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
  */
 export function useEIAData() {
   const [data, setData] = useState<[][]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function useEIAData() {
       .then((data) => {
         if (data?.response?.data) {
           setData(data.response.data);
-          setLoading(false);
+          setIsLoading(false);
         } else {
             setError(new Error("Error fetching data"));
             console.error(data);
@@ -51,6 +51,6 @@ export function useEIAData() {
       });
   }, []);
 
-  return { data, loading, error };
+  return { data, isLoading, error };
 }
 

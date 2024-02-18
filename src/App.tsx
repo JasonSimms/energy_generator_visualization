@@ -3,7 +3,6 @@ import Banner from "./components/Banner"
 import { DataTable } from "./components/Table"
 
 function App() {
-  console.log(import.meta.env.VITE_SOME_KEY)
 
   return (
     <>
