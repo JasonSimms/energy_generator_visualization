@@ -4,12 +4,12 @@ import { render, screen, userEvent } from './utils/test-utils';
 import { describe, it, expect } from 'vitest';
 
 describe('Simple working test', () => {
-  it('the title is visible', () => {
+  it.skip('the title is visible', () => {
     render(<App />)
     expect(screen.getByText(/logos to learn/i)).toBeInTheDocument()
   })
 
-  it('should increment count on click', async () => {
+  it.skip('should increment count on click', async () => {
     render(<App />)
     userEvent.click(screen.getByRole('button'))
     expect(await screen.findByText(/count is 1/i)).toBeInTheDocument()

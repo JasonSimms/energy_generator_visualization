@@ -2,10 +2,13 @@ import { useEIAData } from "../hooks/useEIAData";
 
 export function DataTable() {
 
-    const { loading } = useEIAData("TOTAL.TEICBUS.A");
+    const { loading, data, error } = useEIAData();
+    const errorMessage = error ? `Error: ${error.message}` : null;
 
     return (
         <>
-        <h3>INSERT TABLE HERE {JSON.stringify(loading)}</h3></>
+        <h3>INSERT TABLE HERE {errorMessage}</h3>
+        <p>{JSON.stringify(data)}</p>
+        </>
     )
 }

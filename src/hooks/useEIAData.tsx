@@ -1,23 +1,56 @@
+// useEIAData.tsx
+
+import { buildEIAUrl } from '../utils/apiUtils';
 import { useEffect, useState } from "react";
 
-export const useEIAData = () => {
-    const [data, setData] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        console.log("useEIAData called");
-        // fetch(
-        //   `https://api.eia.gov/series/?api_key=${process.env.REACT_APP_EIA_API_KEY}&series_id=${seriesId}`
-        // )
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //     setData(data.series[0].data);
-        //     setLoading(false);
-        //   });
-    }, []);
+/**
+ * Custom React hook for fetching data from the EIA API.
+ *
+ * This hook takes a URL as a parameter, which should be constructed using the `buildEIAUrl` function.
+ * It returns an object containing the following properties:
+ * - `data`: The data returned from the API. This will be `null` before the data is loaded.
+ * - `isLoading`: A boolean indicating whether the data is currently being loaded.
+ * - `error`: Any error that occurred while fetching the data. This will be `null` if no error occurred.
+ *
+ * The hook handles all aspects of fetching the data, including sending the request, parsing the response,
+ * and handling errors. It uses the `useEffect` hook to fetch the data when the component mounts, and it
+ * updates the `data`, `isLoading`, and `error` values as appropriate.
+ *
+ * @param url - The URL to fetch data from. This should be constructed using the `buildEIAUrl` function.
+ *
+ * @returns An object containing the `data`, `isLoading`, and `error` values.
+ *
+ * @example
+ * const { data, isLoading, error } = useEIAData(url);
+ */
+export function useEIAData() {
+  const [data, setData] = useState<[][]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-    return { data, loading };
-};
+  useEffect(() => {
+    const base_URL = buildEIAUrl({
+      frequency: "monthly",
+      data: ["county", "net-summer-capacity-mw", "net-winter-capacity-mw"],
+      sort: [{ column: "period", direction: "desc" }],
+      offset: 0,
+      length: 5000,
+    });
+    const key = "&api_key=" + import.meta.env.VITE_EIA_API_KEY; // Add your API key here
+    fetch(base_URL + key)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data?.response?.data) {
+          setData(data.response.data);
+          setLoading(false);
+        } else {
+            setError(new Error("Error fetching data"));
+            console.error(data);
+        }
+      });
+  }, []);
 
+  return { data, loading, error };
+}
 
-//https://api.eia.gov/v2/electricity/operating-generator-capacity/data/?frequency=monthly&data[0]=county&data[1]=net-summer-capacity-mw&data[2]=net-winter-capacity-mw&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000

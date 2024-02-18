@@ -8,10 +8,6 @@ function App() {
   return (
     <>
      <h1>Lets go</h1>
-     <h3>
-      
-      HMph?{import.meta.env.VITE_SOME_KEY}
-      </h3>
      <Banner />
      <DataTable />
     </>

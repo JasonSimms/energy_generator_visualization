@@ -15,4 +15,4 @@ Components
 
 
 Dev notes:
-.env requires VITE_EIA_API_KEY={key}
+.env.local requires VITE_EIA_API_KEY={key}
